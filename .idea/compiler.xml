@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="Android-SavedState-ktx.app" target="1.8" />
+      <module name="Android-SavedStateProperty.sample" target="1.8" />
+      <module name="Android-SavedStateProperty.View-SavedState-ktx" target="1.8" />
+      <module name="Android-View-SavedState-ktx.sample" target="1.8" />
+      <module name="Android-View-SavedState-ktx.View-SavedState-ktx" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

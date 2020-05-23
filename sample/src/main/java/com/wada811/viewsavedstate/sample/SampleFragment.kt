@@ -8,24 +8,25 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.savedstate.SavedStateRegistry.AutoRecreated
 import androidx.savedstate.SavedStateRegistryOwner
-import com.wada811.viewsavedstate.sample.databinding.MainFragmentBinding
+import com.wada811.viewsavedstate.sample.databinding.SampleFragmentBinding
 import com.wada811.viewsavedstate.savedState
 
-class MainFragment : Fragment(R.layout.main_fragment) {
+class SampleFragment : Fragment(R.layout.sample_fragment) {
     private val state by savedState()
     private var count by state.property({ getInt(it) }, { key, value -> putInt(key, value) })
     private var text by state.property({ getString(it, "Fragment: ${hashCode()}") }, { key, value -> putString(key, value) })
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         state.runOnNextRecreation<OnNextRecreation>()
-        val binding = MainFragmentBinding.bind(view)
+        val binding = SampleFragmentBinding.bind(view)
         binding.title.text = text
         binding.count.text = "$count"
-        Log.d("SavedStateProperty", "count: $count")
+        Log.d("View-SavedState-ktx", "count: $count")
         binding.plus.setOnClickListener {
             count++
             binding.count.text = "$count"
-            Log.d("SavedStateProperty", "plus: $count")
+            binding.countViewInFragment.countUp()
+            Log.d("View-SavedState-ktx", "plus: $count")
         }
         binding.replace.setOnClickListener {
             parentFragmentManager
@@ -37,9 +38,9 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     private class OnNextRecreation : AutoRecreated {
         override fun onRecreated(owner: SavedStateRegistryOwner) {
-            Log.d("SavedStateProperty", "OnNextRecreation: $owner")
-            if (owner is MainFragment) {
-                Log.d("SavedStateProperty", "arguments: ${owner.arguments}")
+            Log.d("View-SavedState-ktx", "SampleFragment: OnNextRecreation: $owner")
+            if (owner is SampleFragment) {
+                Log.d("View-SavedState-ktx", "SampleFragment: arguments: ${owner.arguments}")
                 owner.onRecreated()
             }
         }
@@ -50,7 +51,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     }
 
     companion object {
-        fun newInstance(count: Int = 0) = MainFragment().apply {
+        fun newInstance(count: Int = 0) = SampleFragment().apply {
             arguments = bundleOf(
                 this::count.name to count,
                 this::text.name to "Fragment: ${hashCode()}"

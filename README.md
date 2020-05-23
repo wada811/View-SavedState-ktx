@@ -11,13 +11,13 @@ View-SavedState-ktx
 
 - You can automatically save and restore properties by delegated properties.
 - The properties default value is a value of **Activity's Intent** or **Fragment's arguments**.
-- You can use in Activity or Fragment. Activity's sample is below.
+- You can use in Activity, Fragment and View. Activity's sample is below.
 
 ```kotlin
 class SampleActivity : AppCompatActivity(R.layout.sample_activity) {
     private val state by savedState()
-    private var count by state.property({ getInt(it) }, { key, value -> putInt(key, value) })
-    private var text by state.property({ getString(it, "default value") }, { key, value -> putString(key, value) })
+    private var count: Int by state.property(defaultValue = 0)
+    private var text: String by state.property({ getString(it, "default value") }, { key, value -> putString(key, value) })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -6,8 +6,8 @@ plugins {
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.wada811.savedstateproperty.sample"
-        minSdkVersion 16
+        applicationId "com.wada811.viewsavedstate.sample"
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

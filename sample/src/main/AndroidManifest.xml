@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.null">
-        <activity android:name="com.wada811.viewsavedstate.sample.MainActivity">
+        <activity android:name="com.wada811.viewsavedstate.sample.SampleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

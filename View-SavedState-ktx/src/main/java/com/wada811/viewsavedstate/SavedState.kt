@@ -1,6 +1,8 @@
 package com.wada811.viewsavedstate
 
 import android.os.Bundle
+import android.view.View
+import androidx.core.view.doOnAttach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle.Event
@@ -11,6 +13,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.savedstate.SavedStateRegistry.AutoRecreated
 import androidx.savedstate.SavedStateRegistryOwner
+import androidx.savedstate.findViewTreeSavedStateRegistryOwner
 import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -19,19 +22,34 @@ fun FragmentActivity.savedState(
     key: String = SavedState.Key,
     defaultBundle: () -> Bundle? = { intent?.extras }
 ): Lazy<SavedState> = lazy {
-    SavedState(this, key, defaultBundle)
+    SavedState({ this }, key, defaultBundle).also { savedState ->
+        savedState.registerSavedStateProvider()
+    }
 }
 
 fun Fragment.savedState(
     key: String = SavedState.Key,
     defaultBundle: () -> Bundle? = { arguments }
 ): Lazy<SavedState> = lazy {
-    SavedState(this, key, defaultBundle)
+    SavedState({ this }, key, defaultBundle).also { savedState ->
+        savedState.registerSavedStateProvider()
+    }
+}
+
+fun View.savedState(
+    key: String = SavedState.Key,
+    defaultBundle: () -> Bundle? = { Bundle() }
+): Lazy<SavedState> = lazy {
+    SavedState({ findViewTreeSavedStateRegistryOwner()!! }, "$key@$id", defaultBundle).also { savedState ->
+        doOnAttach {
+            savedState.registerSavedStateProvider()
+        }
+    }
 }
 
 class SavedState
 internal constructor(
-    private val owner: SavedStateRegistryOwner,
+    private val owner: () -> SavedStateRegistryOwner,
     private val key: String,
     defaultBundle: () -> Bundle?
 ) {
@@ -39,10 +57,12 @@ internal constructor(
         internal const val Key = "com.wada811.savedstateproperty.SavedState.Key"
     }
 
-    private val savedState by lazy { owner.savedStateRegistry.consumeRestoredStateForKey(key) ?: defaultBundle() ?: Bundle() }
+    private val savedState by lazy {
+        owner().savedStateRegistry.consumeRestoredStateForKey(key) ?: defaultBundle() ?: Bundle()
+    }
 
-    init {
-        owner.savedStateRegistry.registerSavedStateProvider(key) { savedState }
+    internal fun registerSavedStateProvider() {
+        owner().savedStateRegistry.registerSavedStateProvider(key) { savedState }
     }
 
     fun <T> property(
@@ -64,7 +84,7 @@ internal constructor(
 
     @Suppress("DEPRECATION")
     @Deprecated("Use runOnNextRecreation<T>()", ReplaceWith("this.runOnNextRecreation<T>()"), DeprecationLevel.WARNING)
-    fun <T : AutoRecreated> runOnNextRecreation(clazz: Class<T>) = owner.runOnNextRecreation(clazz)
+    fun <T : AutoRecreated> runOnNextRecreation(clazz: Class<T>) = owner().runOnNextRecreation(clazz)
 }
 
 @Suppress("DEPRECATION")

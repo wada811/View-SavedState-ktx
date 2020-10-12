@@ -62,52 +62,52 @@ internal constructor(
         internal const val Key = "com.wada811.viewsavedstate.SavedState.Key"
     }
 
-    private val savedState by lazy {
+    val bundle: Bundle by lazy {
         owner().savedStateRegistry.consumeRestoredStateForKey(key) ?: defaultBundle() ?: Bundle()
     }
 
     internal fun registerSavedStateProvider() {
-        owner().savedStateRegistry.registerSavedStateProvider(key) { savedState }
+        owner().savedStateRegistry.registerSavedStateProvider(key) { bundle }
     }
 
     @Suppress("UNCHECKED_CAST")
     fun <T> property(): ReadWriteProperty<Any, T> = object : ReadWriteProperty<Any, T> {
-        override operator fun getValue(thisRef: Any, property: KProperty<*>): T = savedState.get(property.name) as T
+        override operator fun getValue(thisRef: Any, property: KProperty<*>): T = bundle.get(property.name) as T
         override operator fun setValue(thisRef: Any, property: KProperty<*>, value: T) = setValue(property, value)
     }
 
     @Suppress("UNCHECKED_CAST")
     fun <T> property(defaultValue: T): ReadWriteProperty<Any, T> = object : ReadWriteProperty<Any, T> {
-        override operator fun getValue(thisRef: Any, property: KProperty<*>): T = savedState.get(property.name)?.let { it as T } ?: defaultValue
+        override operator fun getValue(thisRef: Any, property: KProperty<*>): T = bundle.get(property.name)?.let { it as T } ?: defaultValue
         override operator fun setValue(thisRef: Any, property: KProperty<*>, value: T) = setValue(property, value)
     }
 
     private fun <T> setValue(property: KProperty<*>, value: T) {
         when (value) {
-            is Boolean -> savedState.putBoolean(property.name, value)
-            is BooleanArray -> savedState.putBooleanArray(property.name, value)
-            is Double -> savedState.putDouble(property.name, value)
-            is DoubleArray -> savedState.putDoubleArray(property.name, value)
-            is Int -> savedState.putInt(property.name, value)
-            is IntArray -> savedState.putIntArray(property.name, value)
-            is Long -> savedState.putLong(property.name, value)
-            is LongArray -> savedState.putLongArray(property.name, value)
-            is String -> savedState.putString(property.name, value)
-            is Binder -> savedState.putBinder(property.name, value)
-            is Bundle -> savedState.putBundle(property.name, value)
-            is Byte -> savedState.putByte(property.name, value)
-            is ByteArray -> savedState.putByteArray(property.name, value)
-            is Char -> savedState.putChar(property.name, value)
-            is CharArray -> savedState.putCharArray(property.name, value)
-            is CharSequence -> savedState.putCharSequence(property.name, value)
-            is Float -> savedState.putFloat(property.name, value)
-            is FloatArray -> savedState.putFloatArray(property.name, value)
-            is Parcelable -> savedState.putParcelable(property.name, value)
-            is Serializable -> savedState.putSerializable(property.name, value)
-            is Short -> savedState.putShort(property.name, value)
-            is ShortArray -> savedState.putShortArray(property.name, value)
-            is Size -> savedState.putSize(property.name, value)
-            is SizeF -> savedState.putSizeF(property.name, value)
+            is Boolean -> bundle.putBoolean(property.name, value)
+            is BooleanArray -> bundle.putBooleanArray(property.name, value)
+            is Double -> bundle.putDouble(property.name, value)
+            is DoubleArray -> bundle.putDoubleArray(property.name, value)
+            is Int -> bundle.putInt(property.name, value)
+            is IntArray -> bundle.putIntArray(property.name, value)
+            is Long -> bundle.putLong(property.name, value)
+            is LongArray -> bundle.putLongArray(property.name, value)
+            is String -> bundle.putString(property.name, value)
+            is Binder -> bundle.putBinder(property.name, value)
+            is Bundle -> bundle.putBundle(property.name, value)
+            is Byte -> bundle.putByte(property.name, value)
+            is ByteArray -> bundle.putByteArray(property.name, value)
+            is Char -> bundle.putChar(property.name, value)
+            is CharArray -> bundle.putCharArray(property.name, value)
+            is CharSequence -> bundle.putCharSequence(property.name, value)
+            is Float -> bundle.putFloat(property.name, value)
+            is FloatArray -> bundle.putFloatArray(property.name, value)
+            is Parcelable -> bundle.putParcelable(property.name, value)
+            is Serializable -> bundle.putSerializable(property.name, value)
+            is Short -> bundle.putShort(property.name, value)
+            is ShortArray -> bundle.putShortArray(property.name, value)
+            is Size -> bundle.putSize(property.name, value)
+            is SizeF -> bundle.putSizeF(property.name, value)
             else -> throw IllegalArgumentException(
                 "Can't set the property(${property.name})'s value($value). Use property(getValue: Bundle.(key: String) -> T, setValue: Bundle.(key: String, value: T) -> Unit) method."
             )
@@ -117,15 +117,15 @@ internal constructor(
     fun <T> property(
         getValue: Bundle.(String) -> T
     ): ReadOnlyProperty<Any, T> = object : ReadOnlyProperty<Any, T> {
-        override operator fun getValue(thisRef: Any, property: KProperty<*>): T = savedState.getValue(property.name)
+        override operator fun getValue(thisRef: Any, property: KProperty<*>): T = bundle.getValue(property.name)
     }
 
     fun <T> property(
         getValue: Bundle.(String) -> T,
         setValue: Bundle.(String, T) -> Unit
     ): ReadWriteProperty<Any, T> = object : ReadWriteProperty<Any, T> {
-        override operator fun getValue(thisRef: Any, property: KProperty<*>): T = savedState.getValue(property.name)
-        override operator fun setValue(thisRef: Any, property: KProperty<*>, value: T) = savedState.setValue(property.name, value)
+        override operator fun getValue(thisRef: Any, property: KProperty<*>): T = bundle.getValue(property.name)
+        override operator fun setValue(thisRef: Any, property: KProperty<*>, value: T) = bundle.setValue(property.name, value)
     }
 
     @Suppress("DEPRECATION")

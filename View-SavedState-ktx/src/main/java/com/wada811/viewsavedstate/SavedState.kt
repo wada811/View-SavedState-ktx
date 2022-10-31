@@ -6,9 +6,9 @@ import android.os.Parcelable
 import android.util.Size
 import android.util.SizeF
 import android.view.View
+import androidx.activity.ComponentActivity
 import androidx.core.view.doOnAttach
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle.Event
 import androidx.lifecycle.Lifecycle.Event.ON_START
 import androidx.lifecycle.Lifecycle.State.CREATED
@@ -23,7 +23,7 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-fun FragmentActivity.savedState(
+fun ComponentActivity.savedState(
     key: String = SavedState.Key,
     defaultBundle: () -> Bundle? = { intent?.extras }
 ): Lazy<SavedState> = lazy {
@@ -52,6 +52,15 @@ fun View.savedState(
     }
 }
 
+fun SavedStateRegistryOwner.savedState(
+    key: String = SavedState.Key,
+    defaultBundle: () -> Bundle? = { null }
+): Lazy<SavedState> = lazy {
+    SavedState({ this }, key, defaultBundle).also { savedState ->
+        savedState.registerSavedStateProvider()
+    }
+}
+
 class SavedState
 internal constructor(
     private val owner: () -> SavedStateRegistryOwner,
@@ -65,6 +74,8 @@ internal constructor(
     val bundle: Bundle by lazy {
         owner().savedStateRegistry.consumeRestoredStateForKey(key) ?: defaultBundle() ?: Bundle()
     }
+    val isRestored: Boolean
+        get() = owner().savedStateRegistry.isRestored
 
     internal fun registerSavedStateProvider() {
         owner().savedStateRegistry.registerSavedStateProvider(key) { bundle }
@@ -102,12 +113,12 @@ internal constructor(
             is CharSequence -> bundle.putCharSequence(property.name, value)
             is Float -> bundle.putFloat(property.name, value)
             is FloatArray -> bundle.putFloatArray(property.name, value)
-            is Parcelable -> bundle.putParcelable(property.name, value)
-            is Serializable -> bundle.putSerializable(property.name, value)
             is Short -> bundle.putShort(property.name, value)
             is ShortArray -> bundle.putShortArray(property.name, value)
             is Size -> bundle.putSize(property.name, value)
             is SizeF -> bundle.putSizeF(property.name, value)
+            is Parcelable -> bundle.putParcelable(property.name, value)
+            is Serializable -> bundle.putSerializable(property.name, value)
             else -> throw IllegalArgumentException(
                 "Can't set the property(${property.name})'s value($value). Use property(getValue: Bundle.(key: String) -> T, setValue: Bundle.(key: String, value: T) -> Unit) method."
             )
@@ -116,9 +127,7 @@ internal constructor(
 
     fun <T> property(
         getValue: Bundle.(String) -> T
-    ): ReadOnlyProperty<Any, T> = object : ReadOnlyProperty<Any, T> {
-        override operator fun getValue(thisRef: Any, property: KProperty<*>): T = bundle.getValue(property.name)
-    }
+    ): ReadOnlyProperty<Any, T> = ReadOnlyProperty { _, property -> bundle.getValue(property.name) }
 
     fun <T> property(
         getValue: Bundle.(String) -> T,
@@ -151,6 +160,7 @@ fun <T : AutoRecreated> SavedStateRegistryOwner.runOnNextRecreation(clazz: Class
                 }
             }
         })
+
         else -> savedStateRegistry.runOnNextRecreation(clazz)
     }
 }

@@ -1,2 +1,32 @@
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex "androidx\\..*"
+                includeGroupByRegex "com\\.android.*"
+                includeGroupByRegex "com\\.google\\..*"
+            }
+        }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google {
+            content {
+                includeGroupByRegex "androidx\\..*"
+                includeGroupByRegex "com\\.android.*"
+                includeGroupByRegex "com\\.google\\..*"
+            }
+        }
+        maven { url "https://jitpack.io" }
+                .content {
+                    includeGroupByRegex "com\\.github\\..*"
+                }
+        mavenCentral()
+    }
+}
 rootProject.name = "Android-View-SavedState-ktx"
 include ':View-SavedState-ktx', ':sample'

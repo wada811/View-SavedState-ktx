@@ -4,9 +4,10 @@ plugins {
 }
 
 android {
+    namespace "com.wada811.viewsavedstatektx.sample"
     compileSdkVersion 33
     defaultConfig {
-        applicationId "com.wada811.viewsavedstate.sample"
+        applicationId "com.wada811.viewsavedstatektx.sample"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1

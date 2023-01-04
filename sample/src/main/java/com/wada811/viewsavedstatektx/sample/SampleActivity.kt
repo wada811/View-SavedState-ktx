@@ -1,4 +1,4 @@
-package com.wada811.viewsavedstate.sample
+package com.wada811.viewsavedstatektx.sample
 
 import android.content.Context
 import android.content.Intent
@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.savedstate.SavedStateRegistry.AutoRecreated
 import androidx.savedstate.SavedStateRegistryOwner
-import com.wada811.viewsavedstate.sample.databinding.SampleActivityBinding
-import com.wada811.viewsavedstate.savedState
+import com.wada811.viewsavedstatektx.sample.databinding.SampleActivityBinding
+import com.wada811.viewsavedstatektx.savedState
 
 class SampleActivity : AppCompatActivity() {
     private val state by savedState()

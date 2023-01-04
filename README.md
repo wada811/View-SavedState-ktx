@@ -51,16 +51,34 @@ class SampleActivity : AppCompatActivity(R.layout.sample_activity) {
 
 ## Gradle
 
-[![](https://jitpack.io/v/wada811/View-SavedState-ktx.svg)](https://jitpack.io/#wada811/View-SavedState-ktx)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.wada811.viewsavedstatektx/viewsavedstatektx/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.wada811.viewsavedstatektx/viewsavedstatektx)
 
 ```groovy
 repositories {
-    maven { url "https://www.jitpack.io" }
+    mavenCentral()
 }
 
 dependencies {
-    implementation 'com.github.wada811:View-SavedState-ktx:x.y.z'
+    implementation 'com.wada811.viewsavedstatektx:viewsavedstatektx:x.y.z'
 }
+```
+
+## Migrations
+
+### 2.0.0
+
+#### dependencies
+
+```diff
+-    implementation 'com.github.wada811:View-SavedState-ktx:x.y.z'
++    implementation 'com.wada811.viewsavedstatektx:viewsavedstatektx:x.y.z'
+```
+
+#### package
+
+```diff
+-import com.wada811.viewsavedstate
++import com.wada811.viewsavedstatektx
 ```
 
 ## License

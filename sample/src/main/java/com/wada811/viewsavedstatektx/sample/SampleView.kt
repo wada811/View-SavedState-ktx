@@ -1,4 +1,4 @@
-package com.wada811.viewsavedstate.sample
+package com.wada811.viewsavedstatektx.sample
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.savedstate.SavedStateRegistry.AutoRecreated
 import androidx.savedstate.SavedStateRegistryOwner
-import com.wada811.viewsavedstate.savedState
+import com.wada811.viewsavedstatektx.savedState
 
 class SampleView
 @JvmOverloads

@@ -1,4 +1,4 @@
-package com.wada811.viewsavedstate.sample
+package com.wada811.viewsavedstatektx.sample
 
 import android.os.Bundle
 import android.util.Log
@@ -8,8 +8,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.savedstate.SavedStateRegistry.AutoRecreated
 import androidx.savedstate.SavedStateRegistryOwner
-import com.wada811.viewsavedstate.sample.databinding.SampleFragmentBinding
-import com.wada811.viewsavedstate.savedState
+import com.wada811.viewsavedstatektx.sample.databinding.SampleFragmentBinding
+import com.wada811.viewsavedstatektx.savedState
 
 class SampleFragment : Fragment(R.layout.sample_fragment) {
     private val state by savedState()

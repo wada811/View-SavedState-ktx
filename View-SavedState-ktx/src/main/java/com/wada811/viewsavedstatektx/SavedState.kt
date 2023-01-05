@@ -83,12 +83,14 @@ internal constructor(
 
     @Suppress("UNCHECKED_CAST")
     fun <T> property(): ReadWriteProperty<Any, T> = object : ReadWriteProperty<Any, T> {
+        @Suppress("DEPRECATION")
         override operator fun getValue(thisRef: Any, property: KProperty<*>): T = bundle.get(property.name) as T
         override operator fun setValue(thisRef: Any, property: KProperty<*>, value: T) = setValue(property, value)
     }
 
     @Suppress("UNCHECKED_CAST")
     fun <T> property(defaultValue: T): ReadWriteProperty<Any, T> = object : ReadWriteProperty<Any, T> {
+        @Suppress("DEPRECATION")
         override operator fun getValue(thisRef: Any, property: KProperty<*>): T = bundle.get(property.name)?.let { it as T } ?: defaultValue
         override operator fun setValue(thisRef: Any, property: KProperty<*>, value: T) = setValue(property, value)
     }
